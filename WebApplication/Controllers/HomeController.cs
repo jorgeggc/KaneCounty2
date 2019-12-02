@@ -22,7 +22,14 @@ namespace WebApplication.Controllers
         {
             return View();
         }
-
+        public IActionResult EmployeeModel()
+        {
+            return View();
+        }
+        public IActionResult EmployeeLog()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
