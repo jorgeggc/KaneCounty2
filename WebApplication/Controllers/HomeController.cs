@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApplication.Models;
+using DataLibary;
+using static DataLibary.BusinessLogic.EmployeeProcessor;
 
 namespace WebApplication.Controllers
 {
@@ -24,6 +26,45 @@ namespace WebApplication.Controllers
         }
         public IActionResult EmployeeModel()
         {
+            return View();
+        }
+        public IActionResult viewEmployees(EmployeeModel model)
+        {
+            var data = LoadEmployees();
+            List<EmployeeModel> employees = new List<EmployeeModel>();
+
+            foreach(var row in data)
+            {
+                employees.Add(new EmployeeModel
+                {
+                    IdentifictionCardID = row.IdentifictionCardID,
+                    Name = row.Name,
+                    OrgStructure = row.OrgStructure,
+                    PhoneNumber = row.PhoneNumber,
+                    EmailAddress = row.EmailAddress,
+                    HireDate = row.HireDate,
+                    TerminationDate = row.TerminationDate,
+                    WorkerTypeID = row.WorkerTypeID,
+                    Company = row.Company,
+                    CourtAccessRequired = row.CourtAccessRequired,
+                    IDCardNumber = row.IDCardNumber
+
+                });
+            }
+            return View(employees);
+        }
+        [HttpPost]
+        public IActionResult EmployeeLog(EmployeeLog model)
+        {
+            if (ModelState.IsValid)
+            {
+               CreateEmployeeLog(model.AccessLocationID, 
+                   model.StationID, 
+                   model.AccessDate, 
+                   model.IDCardNumber, 
+                   model.DeclineReason);
+               return RedirectToAction("Index");
+            }
             return View();
         }
         public IActionResult EmployeeLog()
