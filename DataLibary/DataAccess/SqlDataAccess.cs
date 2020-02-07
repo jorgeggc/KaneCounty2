@@ -10,27 +10,41 @@ using System.Data.SqlClient;
 
 namespace DataLibary.DataAccess
 {
-    public static class SqlDataAccess
+    public class SqlDataAccess
     {
-        public static string GetConnectionString(string connectionName = "BuildingAccess")
+        private SqlConnection conn;
+        public SqlConnection getConnection()
         {
-            return ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
+            String connStr = @"Data Source=(local)\sqlexpress;Database=BuildingAccess;Integrated Security = True;";
+            conn = new SqlConnection(connStr);
+            conn.Open();
+            return conn;
         }
 
-        public static List<T> LoadData<T>(string sql)
+        public SqlDataReader getReader(string sql)
         {
-            using(IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            SqlCommand cmd = new SqlCommand(sql);
+            cmd.CommandType = System.Data.CommandType.Text;
+            cmd.Connection = this.conn;
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            return reader;            
+        }
+
+        public void closeConnection()
+        {
+            if(conn != null && conn.State == System.Data.ConnectionState.Open)
             {
-                return cnn.Query<T>(sql).ToList();
+                this.conn.Close();
             }
         }
         
-        public static int SaveData<T>(string sql, T data)
-        {
-            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
-            {
-                return cnn.Execute(sql, data);
-            }
-        }
+        //public static int SaveData<T>(string sql, T data)
+        //{
+        //    using (IDbConnection cnn = new SqlConnection(conn))
+        //    {
+        //        return cnn.Execute(sql, data);
+        //    }
+        //}
     }
 }

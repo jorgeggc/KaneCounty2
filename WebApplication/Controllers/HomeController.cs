@@ -39,21 +39,13 @@ namespace WebApplication.Controllers
                 {
                     IdentifictionCardID = row.IdentifictionCardID,
                     Name = row.Name,
-                    OrgStructure = row.OrgStructure,
-                    PhoneNumber = row.PhoneNumber,
-                    EmailAddress = row.EmailAddress,
-                    HireDate = row.HireDate,
-                    TerminationDate = row.TerminationDate,
-                    WorkerTypeID = row.WorkerTypeID,
-                    Company = row.Company,
                     CourtAccessRequired = row.CourtAccessRequired,
                     IDCardNumber = row.IDCardNumber
 
                 });
             }
             return View(employees);
-        }
-        [HttpPost]
+        }        
         public IActionResult EmployeeLog(EmployeeLog model)
         {
             if (ModelState.IsValid)
